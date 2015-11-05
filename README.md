@@ -1,2 +1,2 @@
-# erl_m
-Implementation of a useful selection of Monads in Erlang
+# Introduction
+This is a suite of useful monads and applicative functors implemented in Erlang.  There are some idiosynchrosies in the implementation due to the limitations of the Erlang type system.

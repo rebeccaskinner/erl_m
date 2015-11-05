@@ -6,7 +6,8 @@
          return/1,
          id/1,
          join/2,
-         sequence/2
+         sequence/2,
+         sequence_helper/3
         ]).
 
 -type returnf() :: fun((any()) -> any()).
@@ -41,6 +42,12 @@ join(Monad, V) ->
   Bind = bind(Monad),
   Bind(V, fun(A) -> id(A) end).
 
--spec sequence(monad(), [any()]) -> any().
-sequence(Monad, Values) ->
-  foo.
+%sequence_helper(M, Current, Carry) ->
+%  B = bind(M),
+%  B(Current, fun(Cur) -> [Cur | Carry] end).
+%
+%-spec sequence(monad(), [any()]) -> any().
+%sequence(Monad, Values) ->
+%  ReturnFunc = return(Monad),
+%  FoldFunc = fun(Current, Carry) -> sequence_helper(Monad, Current, Carry) end,
+%  lists:foldl(FoldFunc, ReturnFunc([]), Values).
