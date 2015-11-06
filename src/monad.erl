@@ -42,12 +42,12 @@ join(Monad, V) ->
   Bind = bind(Monad),
   Bind(V, fun(A) -> id(A) end).
 
-%sequence_helper(M, Current, Carry) ->
-%  B = bind(M),
-%  B(Current, fun(Cur) -> [Cur | Carry] end).
-%
-%-spec sequence(monad(), [any()]) -> any().
-%sequence(Monad, Values) ->
-%  ReturnFunc = return(Monad),
-%  FoldFunc = fun(Current, Carry) -> sequence_helper(Monad, Current, Carry) end,
-%  lists:foldl(FoldFunc, ReturnFunc([]), Values).
+sequence_helper(M, Current, Carry) ->
+  B = bind(M),
+  B(Current, fun(Cur) -> [Cur | Carry] end).
+
+-spec sequence(monad(), [any()]) -> any().
+sequence(Monad, Values) ->
+  ReturnFunc = return(Monad),
+  FoldFunc = fun(Current, Carry) -> sequence_helper(Monad, Current, Carry) end,
+  ReturnFunc(lists:foldl(FoldFunc, [], Values)).
