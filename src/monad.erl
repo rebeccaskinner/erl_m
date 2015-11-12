@@ -7,7 +7,10 @@
          id/1,
          join/2,
          sequence/2,
-         sequence_helper/3
+         sequence_helper/3,
+         ap/3,
+         co_fmap/3,
+         pure/1
         ]).
 
 -type returnf() :: fun((any()) -> any()).
@@ -31,11 +34,29 @@ bind({_, #{bind := Bind}}) ->
 return({_, #{return := Return}}) ->
   Return.
 
+-spec pure(monad()) -> returnf().
+pure(M) -> return(M).
+
+% Apply a function two a value inside of a Functor/Monadic Context
 -spec fmap(monad(), any(), fun((any()) -> any())) -> any().
 fmap(Monad, Functor, Func) ->
   Bind = bind(Monad),
   Ret = return(Monad),
   Ret(Bind(Functor, Func)).
+
+% Take a Function
+-spec ap(monad(), any(), any()) -> any().
+ap(Monad, FunctorFunc, FunctorValue) ->
+  Bind = bind(Monad),
+  Bind(FunctorFunc,
+       fun(BareFunc) ->
+           fmap(Monad, FunctorValue, BareFunc)
+       end).
+
+-spec co_fmap(monad(), any(), any()) -> any().
+co_fmap(Monad, FunctorFunc, BareValue) ->
+  R = return(Monad),
+  ap(Monad, FunctorFunc, R(BareValue)).
 
 -spec join(monad(), any()) -> any().
 join(Monad, V) ->
