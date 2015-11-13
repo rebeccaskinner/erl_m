@@ -4,7 +4,8 @@
           error/1,
           is_error/1,
           fmap/2,
-          liftM/1
+          liftM/1,
+          show_error/1
 ]).
 
 -type error_m() :: {error, bitstring()} | {ok, any()}.
@@ -33,3 +34,7 @@ fmap({ok, Value}, Func) -> {ok, Func(Value)}.
 
 -spec liftM(Func :: fun((Val :: any()) -> any())) -> fun((error_m()) -> error_m()).
 liftM(F) -> fun(Val) -> fmap(Val, F) end.
+
+-spec show_error(error_m()) -> string().
+show_error({Term, Value}) ->
+  binary_to_list(list_to_binary(io_lib:format("~p: ~p", [Term,Value]))).

@@ -12,7 +12,7 @@
 
 -spec maybe_monad() -> monad:monad().
 maybe_monad() ->
-  monad:make_monad(either_m,
+  monad:make_monad(maybe_m,
                    fun bind/2,
                    fun just/1).
 
