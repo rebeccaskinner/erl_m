@@ -33,10 +33,9 @@ repeat(Elem, Count) ->
 
 -spec intersperse(any(), [any()]) -> [any()].
 intersperse(Infix, List) ->
-    lists:reverse(
       tl(
         lists:reverse(
-          lists:foldl(fun(Elem, Acc) -> [Elem | [Infix | Acc]] end, [], List)))).
+          lists:foldl(fun(Elem, Acc) -> [Elem | [Infix | Acc]] end, [], List))).
 
 -spec intercalate([any()], [any()]) -> [any()].
 intercalate(Infix,List) ->
