@@ -5,7 +5,9 @@
           just/1,
           from_just/1,
           show_maybe/1,
-          from_maybe/2
+          from_maybe/2,
+          is_just/1,
+          is_nothing/1
         ]).
 
 -type maybe_m() :: nothing | {just, any()}.
@@ -24,6 +26,14 @@ nothing() -> nothing.
 
 -spec from_just(maybe_m()) -> any().
 from_just({just, V}) -> V.
+
+-spec is_just(maybe_m()) -> boolean().
+is_just({just, _}) -> true;
+is_just(_) -> false.
+
+-spec is_nothing(maybe_m()) -> boolean().
+is_nothing(nothing) -> true;
+is_nothing(_) -> false.
 
 -spec show_maybe(maybe_m()) -> string().
 show_maybe(nothing) ->
