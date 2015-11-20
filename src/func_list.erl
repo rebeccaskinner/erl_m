@@ -13,7 +13,16 @@
          concat/2,
          flatten/1,
          bind/2,
-         list_monad/0
+         list_monad/0,
+         length/1,
+         null/1,
+         intersperse/2,
+         intercalate/2,
+         repeat/2,
+         cycle/2,
+         unfoldr/2,
+         zipWith/3,
+         zip/2
         ]).
 
 unit() ->
@@ -51,6 +60,49 @@ concat(List1, List2) ->
 
 flatten(ListOfLists) ->
     foldl(fun concat/2, unit(), reverse(ListOfLists)).
+
+length(List) ->
+  foldl(fun(_, Acc) -> Acc + 1 end, 0, List).
+
+cycle(Count, List) when Count =< 0 -> List;
+cycle(Count, List) -> concat(List, cycle(Count - 1, List)).
+
+repeat(Count, Elem) -> cycle(Count, return(Elem)).
+
+unfoldr(Seed, Func) ->
+  MaybeResult = Func(Seed),
+  case maybe_m:is_just(MaybeResult) of
+    true ->
+      {Elem, Carry1} = maybe_m:from_just(MaybeResult),
+      cons(Elem, unfoldr(Carry1, Func));
+    false -> unit()
+  end.
+
+null(List) ->
+  case List() of
+    {} -> true;
+    _ -> false
+  end.
+
+intersperse(Infix, List) ->
+  tail(
+    reverse(
+      foldl(fun(Elem, Acc) -> cons(Elem, cons(Infix, Acc)) end, unit(), List))).
+
+intercalate(Infix, List) ->
+  flatten(intersperse(Infix, List)).
+
+zipWith(Func, List1, List2) ->
+  case {List1(), List2()} of
+    {{}, _} -> unit();
+    {_, {}} -> unit();
+    {{Head1, Rest1}, {Head2, Rest2}} -> 
+      cons(Func(Head1, Head2), zipWith(Func, Rest1, Rest2))
+  end.
+
+zip(List1, List2) ->
+  F = fun(A, B) -> {A, B} end,
+  zipWith(F, List1, List2).
 
 % Monadic Functions
 list_monad() -> monad:make_monad(list, fun bind/2, fun return/1).
