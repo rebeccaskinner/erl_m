@@ -78,7 +78,7 @@ flatten(ListOfLists) ->
 length(List) ->
   foldl(fun(_, Acc) -> Acc + 1 end, 0, List).
 
-cycle(Count, List) when Count =< 0 -> List;
+cycle(Count, List) when Count =< 1 -> List;
 cycle(Count, List) -> concat(List, cycle(Count - 1, List)).
 
 repeat(Count, Elem) -> cycle(Count, return(Elem)).
@@ -132,8 +132,6 @@ to_list(Lst) ->
 
 from_list(Lst) ->
     lists:foldl(fun cons/2, unit(), lists:reverse(Lst)).
-
-
 
 % Internal Functions
 reverse(Carry, Lst) ->

@@ -18,3 +18,20 @@ countdown(Num) ->
 unfold_countdown(StartWith) ->
   Countdown = func_list:unfoldr(StartWith, fun countdown/1),
   func_list:to_list(Countdown).
+
+monadic_list_example(Lst) ->
+  F = fun(A) ->
+         func_list:repeat(3, A)
+      end,
+  M = func_list:list_monad(),
+  B = monad:bind(M),
+  L = B(func_list:from_list(Lst), F),
+  func_list:to_list(L).  
+
+lazy_list_example(Lst) ->
+  F = fun(A, B) ->
+          io:format("(~p, ~p) -> {~p, ~p}~n", [A,B,A,B]),
+          {A, B}
+      end,
+  func_list:foldl1(F, func_list:from_list(Lst)).
+  
