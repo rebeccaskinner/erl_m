@@ -1,28 +1,30 @@
 -module(func_list).
--export([unit/0,
-         cons/2,
-         head/1,
-         tail/1,
-         to_list/1,
-         from_list/1,
-         map/2,
-         return/1,
-         reverse/1,
-         foldl/3,
-         foldl1/2,
-         concat/2,
-         flatten/1,
-         bind/2,
-         list_monad/0,
-         length/1,
-         null/1,
-         intersperse/2,
-         intercalate/2,
-         repeat/2,
-         cycle/2,
-         unfoldr/2,
-         zipWith/3,
-         zip/2
+-export([ unit/0
+        , cons/2
+        , head/1
+        , tail/1
+        , to_list/1
+        , from_list/1
+        , map/2
+        , return/1
+        , reverse/1
+        , foldl/3
+        , foldl1/2
+        , concat/2
+        , flatten/1
+        , bind/2
+        , list_monad/0
+        , length/1
+        , null/1
+        , intersperse/2
+        , intercalate/2
+        , repeat/2
+        , cycle/2
+        , unfoldr/2
+        , zipWith/3
+        , zip/2
+        , maybe_head/1
+        , maybe_tail/1
         ]).
 
 unit() ->
@@ -36,6 +38,18 @@ head(Lst) ->
 
 tail(Lst) ->
     element(2, Lst()).
+
+maybe_head(List) ->
+  case null(List) of
+    true -> maybe_m:nothing();
+    false -> maybe_m:just(head(List))
+  end.
+
+maybe_tail(List) ->
+  case null(List) of
+    true -> maybe_m:nothing();
+    false -> maybe_m:just(tail(List))
+  end.
 
 map(Fun, Lst) ->
     case Lst() of
