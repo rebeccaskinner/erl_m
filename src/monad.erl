@@ -4,7 +4,6 @@
         , fmap/3
         , bind/1
         , return/1
-        , id/1
         , join/2
         , sequence/2
         , sequence_helper/3
@@ -67,8 +66,6 @@
                         MonoidFunctions :: map()
                       }.
 
--spec id(any()) -> any().
-id(V) -> V.
 
 -spec make_monad(atom(), bindf(), returnf()) -> monad().
 make_monad(Name, Bind, Return) ->
@@ -121,7 +118,7 @@ co_fmap(Monad, FunctorFunc, BareValue) ->
 -spec join(monad(), any()) -> any().
 join(Monad, V) ->
   Bind = bind(Monad),
-  Bind(V, fun(A) -> id(A) end).
+  Bind(V, fun(A) -> functions:id(A) end).
 
 sequence_helper(M, Current, Carry) ->
   B = bind(M),

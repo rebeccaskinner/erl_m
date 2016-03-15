@@ -25,6 +25,7 @@
         , zip/2
         , maybe_head/1
         , maybe_tail/1
+        , filter/2
         ]).
 
 unit() ->
@@ -105,6 +106,16 @@ intersperse(Infix, List) ->
 
 intercalate(Infix, List) ->
   flatten(intersperse(Infix, List)).
+
+filter(Predicate, List) ->
+  FilterElem = fun(Elem, Acc) ->
+                   case Predicate(Elem) of
+                     false -> cons(Elem, Acc);
+                     _ -> Acc
+                   end
+               end,
+  reverse(foldl(FilterElem, unit(), List)).
+                   
 
 zipWith(Func, List1, List2) ->
   case {List1(), List2()} of
